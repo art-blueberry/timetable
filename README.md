@@ -1,1 +1,590 @@
-# timetable
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Расписание на неделю</title>
+    
+    <!-- Мета-теги для работы в виде приложения -->
+    <meta name="theme-color" content="#e2e8f0">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        /* --- ПЕРЕМЕННЫЕ И БАЗА --- */
+        :root {
+            --text-dark: #1e293b;
+            --text-light: #ffffff;
+            --card-bg: rgba(255, 255, 255, 0.55); 
+            --card-border: rgba(255, 255, 255, 0.7);
+            --glass-shadow: 0 8px 24px 0 rgba(31, 38, 135, 0.08);
+            --badge-bg: rgba(255, 255, 255, 0.8);
+        }
+
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent; 
+        }
+
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            min-height: 100vh;
+            font-family: 'Montserrat', sans-serif;
+            color: var(--text-dark);
+            background: #e2e8f0;
+            background-image:
+                radial-gradient(at 0% 0%, hsla(253, 16%, 7%, 1) 0, transparent 50%),
+                radial-gradient(at 50% 0%, hsla(225, 39%, 30%, 1) 0, transparent 50%),
+                radial-gradient(at 100% 0%, hsla(339, 49%, 30%, 1) 0, transparent 50%);
+            background-attachment: fixed;
+            -webkit-font-smoothing: antialiased;
+            touch-action: pan-y; 
+            overscroll-behavior-y: none; 
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.4) 100%);
+            z-index: -1;
+        }
+
+        .scroll-wrapper {
+            padding: 30px 16px;
+            padding-bottom: calc(30px + env(safe-area-inset-bottom));
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        /* --- ЗАГОЛОВОК --- */
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            color: var(--text-light);
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .header h1 {
+            font-size: 28px;
+            font-weight: 800;
+            margin: 0;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .header p {
+            font-size: 16px;
+            font-weight: 500;
+            margin: 4px 0 0;
+            opacity: 0.9;
+        }
+
+        /* --- СЕТКА --- */
+        .schedule-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 24px;
+            align-items: start;
+        }
+
+        @media (min-width: 768px) {
+            .schedule-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .schedule-grid {
+                grid-template-columns: 1fr 1fr 1fr;
+            }
+        }
+
+        /* --- КАРТОЧКА ДНЯ --- */
+        .day-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+            box-shadow: var(--glass-shadow);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            padding-top: 24px;
+            padding-bottom: 10px;
+        }
+
+        /* --- ПЛАШКА ДНЯ --- */
+        .day-title-wrapper {
+            position: absolute;
+            top: -14px;
+            left: 16px;
+            right: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            pointer-events: none;
+        }
+
+        .day-title {
+            margin: 0;
+            padding: 8px 20px;
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--text-light);
+            border-radius: 10px;
+            letter-spacing: 0.5px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .date-badge {
+            display: none;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 4px 8px;
+            border-radius: 8px;
+            text-align: center;
+            color: var(--text-dark);
+            font-weight: 700;
+            line-height: 1.1;
+            font-size: 13px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            margin-top: 2px;
+        }
+
+        .date-badge span {
+            display: block;
+            font-size: 10px;
+            opacity: 0.7;
+            font-weight: 600;
+        }
+
+        /* Цвета плашек */
+        .day-card:nth-child(1) .day-title { background: #f48fb1; }
+        .day-card:nth-child(2) .day-title { background: #64b5f6; }
+        .day-card:nth-child(3) .day-title { background: #4db6ac; }
+        .day-card:nth-child(4) .day-title { background: #ffb74d; }
+        .day-card:nth-child(5) .day-title { background: #9575cd; }
+        .day-card:nth-child(6) .day-title { background: #ef5350; }
+
+        /* --- ПОДСВЕТКА СЕГОДНЯШНЕГО ДНЯ --- */
+        .day-card.today {
+            background: #ffffff;
+            border: 1px solid #ffffff;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .day-card.today .date-badge {
+            display: block;
+        }
+
+        .day-card.today .lesson-num {
+            background: #f1f5f9;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .day-card.today .lesson-room {
+            background: #f1f5f9;
+        }
+
+        /* --- СПИСОК УРОКОВ --- */
+        .lesson-list {
+            display: flex;
+            flex-direction: column;
+            padding: 0 16px;
+        }
+
+        .lesson {
+            display: flex;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .lesson:last-child {
+            border-bottom: none;
+        }
+
+        .lesson-num {
+            width: 26px;
+            min-width: 26px;
+            height: 26px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 13px;
+            margin-right: 12px;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.6);
+            color: #475569;
+            flex-shrink: 0;
+        }
+
+        .lesson-info {
+            flex-grow: 1;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            min-width: 0;
+        }
+
+        .lesson-name {
+            font-size: 14px;
+            font-weight: 600;
+            color: #1e293b;
+            line-height: 1.3;
+            padding-right: 8px;
+        }
+
+        .lesson-room {
+            background: var(--badge-bg);
+            padding: 3px 8px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 700;
+            color: #334155;
+            white-space: nowrap;
+            flex-shrink: 0;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        /* --- АДАПТИВНОСТЬ --- */
+        @media (max-width: 480px) {
+            .scroll-wrapper { padding: 20px 12px; }
+            .header { margin-bottom: 24px; }
+            .header h1 { font-size: 26px; }
+            .header p { font-size: 16px; }
+
+            .day-card {
+                padding-top: 26px;
+                padding-bottom: 14px;
+                border-radius: 16px;
+            }
+
+            .day-title { padding: 8px 18px; font-size: 15px; }
+            .date-badge { padding: 4px 8px; font-size: 14px; }
+            .date-badge span { font-size: 11px; }
+
+            .lesson-list { padding: 0 16px; }
+            .lesson { padding: 14px 0; }
+
+            .lesson-num {
+                width: 32px;
+                min-width: 32px;
+                height: 32px;
+                font-size: 15px;
+                margin-right: 14px;
+                border-radius: 8px;
+            }
+
+            .lesson-name { font-size: 16px; line-height: 1.3; }
+            .lesson-room { font-size: 13px; padding: 4px 8px; border-radius: 6px; }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="scroll-wrapper">
+        <div class="container">
+
+            <div class="header">
+                <h1>Расписание</h1>
+                <p>на неделю</p>
+            </div>
+
+            <div class="schedule-grid" id="schedule">
+
+                <!-- ПОНЕДЕЛЬНИК -->
+                <div class="day-card" data-day="1">
+                    <div class="day-title-wrapper">
+                        <h2 class="day-title">Понедельник</h2>
+                        <div class="date-badge"></div>
+                    </div>
+                    <div class="lesson-list">
+                        <div class="lesson">
+                            <div class="lesson-num">1</div>
+                            <div class="lesson-info"><span class="lesson-name">Физическая культура</span><span
+                                    class="lesson-room">спортзал</span></div>
+                        </div>
+                        <div class="lesson">
+                            <div class="lesson-num">2</div>
+                            <div class="lesson-info"><span class="lesson-name">Иностранный язык</span><span
+                                    class="lesson-room">45</span></div>
+                        </div>
+                        <div class="lesson">
+                            <div class="lesson-num">3</div>
+                            <div class="lesson-info"><span class="lesson-name">Математика</span><span
+                                    class="lesson-room">20</span></div>
+                        </div>
+                        <div class="lesson">
+                            <div class="lesson-num">4</div>
+                            <div class="lesson-info"><span class="lesson-name">Математика</span><span
+                                    class="lesson-room">20</span></div>
+                        </div>
+                        <div class="lesson">
+                            <div class="lesson-num">5</div>
+                            <div class="lesson-info"><span class="lesson-name">Физика</span><span
+                                    class="lesson-room">15</span></div>
+                        </div>
+                        <div class="lesson">
+                            <div class="lesson-num">6</div>
+                            <div class="lesson-info"><span class="lesson-name">Математика в эк</span><span
+                                    class="lesson-room">20</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ВТОРНИК -->
+                <div class="day-card" data-day="2">
+                    <div class="day-title-wrapper">
+                        <h2 class="day-title">Вторник</h2>
+                        <div class="date-badge"></div>
+                    </div>
+                    <div class="lesson-list">
+                        <div class="lesson">
+                            <div class="lesson-num">1</div>
+                            <div class="lesson-info"><span class="lesson-name">Русский язык</span><span
+                                    class="lesson-room">39</span></div>
+                        </div>
+                        <div class="lesson">
+                            <div class="lesson-num">2</div>
+                            <div class="lesson-info"><span class="lesson-name">Математика</span><span
+                                    class="lesson-room">20</span></div>
+                        </div>
+                        <div class="lesson">
+                            <div class="lesson-num">3</div>
+                            <div class="lesson-info"><span class="lesson-name">Математика</span><span
+                                    class="lesson-room">20</span></div>
+                        </div>
+                        <div class="lesson">
+                            <div class="lesson-num">4</div>
+                            <div class="lesson-info"><span class="lesson-name">Иностранный язык</span><span
+                                    class="lesson-room">45</span></div>
+                        </div>
+                        <div class="lesson">
+                            <div class="lesson-num">5</div>
+                            <div class="lesson-info"><span class="lesson-name">Говорим и пишем</span><span
+                                    class="lesson-room">39</span></div>
+                        </div>
+                        <div class="lesson">
+                            <div class="lesson-num">6</div>
+                            <div class="lesson-info"><span class="lesson-name">География</span><span
+                                    class="lesson-room">31</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- СРЕДА -->
+                <div class="day-card" data-day="3">
+                    <div class="day-title-wrapper">
+                        <h2 class="day-title">Среда</h2>
+                        <div class="date-badge"></div>
+                    </div>
+                    <div class="lesson-list">
+                        <div class="lesson">
+                            <div class="lesson-num">1</div>
+                            <div class="lesson-info"><span class="lesson-name">Математика</span><span
+                                    class="lesson-room">20</span></div>
+                        </div>
+                        <div class="lesson">
+                            <div class="lesson-num">2</div>
+                            <div class="lesson-info"><span class="lesson-name">Обществознание</span><span
+                                    class="lesson-room">41</span></div>
+                        </div>
+                        <div class="lesson">
+                            <div class="lesson-num">3</div>
+                            <div class="lesson-info"><span class="lesson-name">Биология</span><span
+                                    class="lesson-room">33</span></div>
+                        </div>
+                        <div class="lesson">
+                            <div class="lesson-num">4</div>
+                            <div class="lesson-info"><span class="lesson-name">История</span><span
+                                    class="lesson-room">26</span></div>
+                        </div>
+                        <div class="lesson">
+                            <div class="lesson-num">5</div>
+                            <div class="lesson-info"><span class="lesson-name">Физическая культура</span><span
+                                    class="lesson-room">спортзал</span></div>
+                        </div>
+                        <div class="lesson">
+                            <div class="lesson-num">6</div>
+                            <div class="lesson-info"><span class="lesson-name">Литература</span><span
+                                    class="lesson-room">39</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ЧЕТВЕРГ -->
+                <div class="day-card" data-day="4">
+                    <div class="day-title-wrapper">
+                        <h2 class="day-title">Четверг</h2>
+                        <div class="date-badge"></div>
+                    </div>
+                    <div class="lesson-list">
+                        <div class="lesson">
+                            <div class="lesson-num">1</div>
+                            <div class="lesson-info"><span class="lesson-name">Математика</span><span
+                                    class="lesson-room">20</span></div>
+                        </div>
+                        <div class="lesson">
+                            <div class="lesson-num">2</div>
+                            <div class="lesson-info"><span class="lesson-name">Иностранный язык</span><span
+                                    class="lesson-room">45</span></div>
+                        </div>
+                        <div class="lesson">
+                            <div class="lesson-num">3</div>
+                            <div class="lesson-info"><span class="lesson-name">Физика</span><span
+                                    class="lesson-room">17</span></div>
+                        </div>
+                        <div class="lesson">
+                            <div class="lesson-num">4</div>
+                            <div class="lesson-info"><span class="lesson-name">Литература</span><span
+                                    class="lesson-room">39</span></div>
+                        </div>
+                        <div class="lesson">
+                            <div class="lesson-num">5</div>
+                            <div class="lesson-info"><span class="lesson-name">География</span><span
+                                    class="lesson-room">31</span></div>
+                        </div>
+                        <div class="lesson">
+                            <div class="lesson-num">6</div>
+                            <div class="lesson-info"><span class="lesson-name">Обществознание</span><span
+                                    class="lesson-room">41</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ПЯТНИЦА -->
+                <div class="day-card" data-day="5">
+                    <div class="day-title-wrapper">
+                        <h2 class="day-title">Пятница</h2>
+                        <div class="date-badge"></div>
+                    </div>
+                    <div class="lesson-list">
+                        <div class="lesson">
+                            <div class="lesson-num">1</div>
+                            <div class="lesson-info"><span class="lesson-name">ОБЗР</span><span
+                                    class="lesson-room">32</span></div>
+                        </div>
+                        <div class="lesson">
+                            <div class="lesson-num">2</div>
+                            <div class="lesson-info"><span class="lesson-name">География</span><span
+                                    class="lesson-room">31</span></div>
+                        </div>
+                        <div class="lesson">
+                            <div class="lesson-num">3</div>
+                            <div class="lesson-info"><span class="lesson-name">История</span><span
+                                    class="lesson-room">26</span></div>
+                        </div>
+                        <div class="lesson">
+                            <div class="lesson-num">4</div>
+                            <div class="lesson-info"><span class="lesson-name">Обществознание</span><span
+                                    class="lesson-room">41</span></div>
+                        </div>
+                        <div class="lesson">
+                            <div class="lesson-num">5</div>
+                            <div class="lesson-info"><span class="lesson-name">Физическая культура</span><span
+                                    class="lesson-room">спортзал</span></div>
+                        </div>
+                        <div class="lesson">
+                            <div class="lesson-num">6</div>
+                            <div class="lesson-info"><span class="lesson-name">Информатика</span><span
+                                    class="lesson-room">18</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- СУББОТА -->
+                <div class="day-card" data-day="6">
+                    <div class="day-title-wrapper">
+                        <h2 class="day-title">Суббота</h2>
+                        <div class="date-badge"></div>
+                    </div>
+                    <div class="lesson-list">
+                        <div class="lesson">
+                            <div class="lesson-num">1</div>
+                            <div class="lesson-info"><span class="lesson-name">Литература</span><span
+                                    class="lesson-room">39</span></div>
+                        </div>
+                        <div class="lesson">
+                            <div class="lesson-num">2</div>
+                            <div class="lesson-info"><span class="lesson-name">Русский язык</span><span
+                                    class="lesson-room">39</span></div>
+                        </div>
+                        <div class="lesson">
+                            <div class="lesson-num">3</div>
+                            <div class="lesson-info"><span class="lesson-name">Химия</span><span
+                                    class="lesson-room">33</span></div>
+                        </div>
+                        <div class="lesson">
+                            <div class="lesson-num">4</div>
+                            <div class="lesson-info"><span class="lesson-name">Математика</span><span
+                                    class="lesson-room">20</span></div>
+                        </div>
+                        <div class="lesson">
+                            <div class="lesson-num">5</div>
+                            <div class="lesson-info"><span class="lesson-name">Математика</span><span
+                                    class="lesson-room">20</span></div>
+                        </div>
+                        <div class="lesson">
+                            <div class="lesson-num">6</div>
+                            <div class="lesson-info"><span class="lesson-name">Обществознание</span><span
+                                    class="lesson-room">41</span></div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var now = new Date();
+            var today = now.getDay(); 
+            // В JS: 0 - Воскресенье, 1 - Понедельник, ... 6 - Суббота
+
+            // Если сегодня не воскресенье (в вашем расписании только Пн-Сб)
+            if (today >= 1 && today <= 6) {
+                var dateNum = now.getDate();
+                var monthNum = now.getMonth() + 1;
+                if (monthNum < 10) {
+                    monthNum = '0' + monthNum;
+                }
+
+                var card = document.querySelector('.day-card[data-day="' + today + '"]');
+                
+                if (card) {
+                    card.classList.add('today');
+                    
+                    var titleEl = card.querySelector('.day-title');
+                    if (titleEl) {
+                        titleEl.textContent = 'Сегодня';
+                    }
+                    
+                    var dateBadge = card.querySelector('.date-badge');
+                    if (dateBadge) {
+                        dateBadge.innerHTML = dateNum + '<span>' + monthNum + '</span>';
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>
