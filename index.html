@@ -6,7 +6,7 @@
     <meta name="viewport"
         content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Расписание на неделю</title>
-    
+
     <!-- Мета-теги для работы в виде приложения -->
     <meta name="theme-color" content="#e2e8f0">
     <meta name="mobile-web-app-capable" content="yes">
@@ -22,7 +22,7 @@
         :root {
             --text-dark: #1e293b;
             --text-light: #ffffff;
-            --card-bg: rgba(255, 255, 255, 0.55); 
+            --card-bg: rgba(255, 255, 255, 0.55);
             --card-border: rgba(255, 255, 255, 0.7);
             --glass-shadow: 0 8px 24px 0 rgba(31, 38, 135, 0.08);
             --badge-bg: rgba(255, 255, 255, 0.8);
@@ -30,10 +30,11 @@
 
         * {
             box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent; 
+            -webkit-tap-highlight-color: transparent;
         }
 
-        html, body {
+        html,
+        body {
             margin: 0;
             padding: 0;
             width: 100%;
@@ -47,8 +48,8 @@
                 radial-gradient(at 100% 0%, hsla(339, 49%, 30%, 1) 0, transparent 50%);
             background-attachment: fixed;
             -webkit-font-smoothing: antialiased;
-            touch-action: pan-y; 
-            overscroll-behavior-y: none; 
+            touch-action: pan-y;
+            overscroll-behavior-y: none;
         }
 
         body::before {
@@ -173,12 +174,29 @@
         }
 
         /* Цвета плашек */
-        .day-card:nth-child(1) .day-title { background: #f48fb1; }
-        .day-card:nth-child(2) .day-title { background: #64b5f6; }
-        .day-card:nth-child(3) .day-title { background: #4db6ac; }
-        .day-card:nth-child(4) .day-title { background: #ffb74d; }
-        .day-card:nth-child(5) .day-title { background: #9575cd; }
-        .day-card:nth-child(6) .day-title { background: #ef5350; }
+        .day-card:nth-child(1) .day-title {
+            background: #f48fb1;
+        }
+
+        .day-card:nth-child(2) .day-title {
+            background: #64b5f6;
+        }
+
+        .day-card:nth-child(3) .day-title {
+            background: #4db6ac;
+        }
+
+        .day-card:nth-child(4) .day-title {
+            background: #ffb74d;
+        }
+
+        .day-card:nth-child(5) .day-title {
+            background: #9575cd;
+        }
+
+        .day-card:nth-child(6) .day-title {
+            background: #ef5350;
+        }
 
         /* --- ПОДСВЕТКА СЕГОДНЯШНЕГО ДНЯ --- */
         .day-card.today {
@@ -264,10 +282,21 @@
 
         /* --- АДАПТИВНОСТЬ --- */
         @media (max-width: 480px) {
-            .scroll-wrapper { padding: 20px 12px; }
-            .header { margin-bottom: 24px; }
-            .header h1 { font-size: 26px; }
-            .header p { font-size: 16px; }
+            .scroll-wrapper {
+                padding: 20px 12px;
+            }
+
+            .header {
+                margin-bottom: 24px;
+            }
+
+            .header h1 {
+                font-size: 26px;
+            }
+
+            .header p {
+                font-size: 16px;
+            }
 
             .day-card {
                 padding-top: 26px;
@@ -275,12 +304,27 @@
                 border-radius: 16px;
             }
 
-            .day-title { padding: 8px 18px; font-size: 15px; }
-            .date-badge { padding: 4px 8px; font-size: 14px; }
-            .date-badge span { font-size: 11px; }
+            .day-title {
+                padding: 8px 18px;
+                font-size: 15px;
+            }
 
-            .lesson-list { padding: 0 16px; }
-            .lesson { padding: 14px 0; }
+            .date-badge {
+                padding: 4px 8px;
+                font-size: 14px;
+            }
+
+            .date-badge span {
+                font-size: 11px;
+            }
+
+            .lesson-list {
+                padding: 0 16px;
+            }
+
+            .lesson {
+                padding: 14px 0;
+            }
 
             .lesson-num {
                 width: 32px;
@@ -291,8 +335,16 @@
                 border-radius: 8px;
             }
 
-            .lesson-name { font-size: 16px; line-height: 1.3; }
-            .lesson-room { font-size: 13px; padding: 4px 8px; border-radius: 6px; }
+            .lesson-name {
+                font-size: 16px;
+                line-height: 1.3;
+            }
+
+            .lesson-room {
+                font-size: 13px;
+                padding: 4px 8px;
+                border-radius: 6px;
+            }
         }
     </style>
 </head>
@@ -556,7 +608,7 @@
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             var now = new Date();
-            var today = now.getDay(); 
+            var today = now.getDay();
             // В JS: 0 - Воскресенье, 1 - Понедельник, ... 6 - Суббота
 
             // Если сегодня не воскресенье (в вашем расписании только Пн-Сб)
@@ -568,19 +620,32 @@
                 }
 
                 var card = document.querySelector('.day-card[data-day="' + today + '"]');
-                
+
                 if (card) {
                     card.classList.add('today');
-                    
+
                     var titleEl = card.querySelector('.day-title');
                     if (titleEl) {
                         titleEl.textContent = 'Сегодня';
                     }
-                    
+
                     var dateBadge = card.querySelector('.date-badge');
                     if (dateBadge) {
                         dateBadge.innerHTML = dateNum + '<span>' + monthNum + '</span>';
                     }
+
+                    // === ПРОКРУТКА К СЕГОДНЯШНЕМУ ДНЮ ===
+                    // Небольшая задержка, чтобы шрифты и layout успели загрузиться
+                    setTimeout(function () {
+                        var cardTop = card.getBoundingClientRect().top + window.pageYOffset;
+                        // Отступ сверху, чтобы плашка дня не прилипала к краю экрана
+                        var offset = 16;
+
+                        window.scrollTo({
+                            top: cardTop - offset,
+                            behavior: 'smooth'
+                        });
+                    }, 100);
                 }
             }
         });
