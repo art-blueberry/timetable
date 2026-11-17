@@ -174,29 +174,12 @@
         }
 
         /* Цвета плашек */
-        .day-card:nth-child(1) .day-title {
-            background: #f48fb1;
-        }
-
-        .day-card:nth-child(2) .day-title {
-            background: #64b5f6;
-        }
-
-        .day-card:nth-child(3) .day-title {
-            background: #4db6ac;
-        }
-
-        .day-card:nth-child(4) .day-title {
-            background: #ffb74d;
-        }
-
-        .day-card:nth-child(5) .day-title {
-            background: #9575cd;
-        }
-
-        .day-card:nth-child(6) .day-title {
-            background: #ef5350;
-        }
+        .day-card:nth-child(1) .day-title { background: #f48fb1; }
+        .day-card:nth-child(2) .day-title { background: #64b5f6; }
+        .day-card:nth-child(3) .day-title { background: #4db6ac; }
+        .day-card:nth-child(4) .day-title { background: #ffb74d; }
+        .day-card:nth-child(5) .day-title { background: #9575cd; }
+        .day-card:nth-child(6) .day-title { background: #ef5350; }
 
         /* --- ПОДСВЕТКА СЕГОДНЯШНЕГО ДНЯ --- */
         .day-card.today {
@@ -260,12 +243,28 @@
             min-width: 0;
         }
 
+        /* Контейнер для названия и времени */
+        .lesson-text-wrapper {
+            display: flex;
+            flex-direction: column;
+            padding-right: 8px;
+            min-width: 0;
+        }
+
         .lesson-name {
             font-size: 14px;
             font-weight: 600;
             color: #1e293b;
             line-height: 1.3;
-            padding-right: 8px;
+        }
+
+        /* Стили для времени звонка */
+        .lesson-time {
+            font-size: 11px;
+            font-weight: 500;
+            color: #64748b;
+            margin-top: 2px;
+            letter-spacing: 0.2px;
         }
 
         .lesson-room {
@@ -340,6 +339,11 @@
                 line-height: 1.3;
             }
 
+            .lesson-time {
+                font-size: 12px;
+                margin-top: 3px;
+            }
+
             .lesson-room {
                 font-size: 13px;
                 padding: 4px 8px;
@@ -369,34 +373,73 @@
                     </div>
                     <div class="lesson-list">
                         <div class="lesson">
+                            <div class="lesson-num">0</div>
+                            <div class="lesson-info">
+                                <div class="lesson-text-wrapper">
+                                    <span class="lesson-name">Разговоры о важном</span>
+                                    <span class="lesson-time">8:00 – 8:30</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="lesson">
                             <div class="lesson-num">1</div>
-                            <div class="lesson-info"><span class="lesson-name">Физическая культура</span><span
-                                    class="lesson-room">спортзал</span></div>
+                            <div class="lesson-info">
+                                <div class="lesson-text-wrapper">
+                                    <span class="lesson-name">Физическая культура</span>
+                                    <span class="lesson-time">8:35 – 9:15</span>
+                                </div>
+                                <span class="lesson-room">спортзал</span>
+                            </div>
                         </div>
                         <div class="lesson">
                             <div class="lesson-num">2</div>
-                            <div class="lesson-info"><span class="lesson-name">Иностранный язык</span><span
-                                    class="lesson-room">45</span></div>
+                            <div class="lesson-info">
+                                <div class="lesson-text-wrapper">
+                                    <span class="lesson-name">Иностранный язык</span>
+                                    <span class="lesson-time">9:35 – 10:15</span>
+                                </div>
+                                <span class="lesson-room">45</span>
+                            </div>
                         </div>
                         <div class="lesson">
                             <div class="lesson-num">3</div>
-                            <div class="lesson-info"><span class="lesson-name">Математика</span><span
-                                    class="lesson-room">20</span></div>
+                            <div class="lesson-info">
+                                <div class="lesson-text-wrapper">
+                                    <span class="lesson-name">Математика</span>
+                                    <span class="lesson-time">10:35 – 11:15</span>
+                                </div>
+                                <span class="lesson-room">20</span>
+                            </div>
                         </div>
                         <div class="lesson">
                             <div class="lesson-num">4</div>
-                            <div class="lesson-info"><span class="lesson-name">Математика</span><span
-                                    class="lesson-room">20</span></div>
+                            <div class="lesson-info">
+                                <div class="lesson-text-wrapper">
+                                    <span class="lesson-name">Математика</span>
+                                    <span class="lesson-time">11:30 – 12:10</span>
+                                </div>
+                                <span class="lesson-room">20</span>
+                            </div>
                         </div>
                         <div class="lesson">
                             <div class="lesson-num">5</div>
-                            <div class="lesson-info"><span class="lesson-name">Физика</span><span
-                                    class="lesson-room">15</span></div>
+                            <div class="lesson-info">
+                                <div class="lesson-text-wrapper">
+                                    <span class="lesson-name">Физика</span>
+                                    <span class="lesson-time">12:15 – 12:50</span>
+                                </div>
+                                <span class="lesson-room">15</span>
+                            </div>
                         </div>
                         <div class="lesson">
                             <div class="lesson-num">6</div>
-                            <div class="lesson-info"><span class="lesson-name">Математика в эк</span><span
-                                    class="lesson-room">20</span></div>
+                            <div class="lesson-info">
+                                <div class="lesson-text-wrapper">
+                                    <span class="lesson-name">Математика в эк</span>
+                                    <span class="lesson-time">12:55 – 13:30</span>
+                                </div>
+                                <span class="lesson-room">20</span>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -410,33 +453,63 @@
                     <div class="lesson-list">
                         <div class="lesson">
                             <div class="lesson-num">1</div>
-                            <div class="lesson-info"><span class="lesson-name">Русский язык</span><span
-                                    class="lesson-room">39</span></div>
+                            <div class="lesson-info">
+                                <div class="lesson-text-wrapper">
+                                    <span class="lesson-name">Русский язык</span>
+                                    <span class="lesson-time">8:00 – 8:40</span>
+                                </div>
+                                <span class="lesson-room">39</span>
+                            </div>
                         </div>
                         <div class="lesson">
                             <div class="lesson-num">2</div>
-                            <div class="lesson-info"><span class="lesson-name">Математика</span><span
-                                    class="lesson-room">20</span></div>
+                            <div class="lesson-info">
+                                <div class="lesson-text-wrapper">
+                                    <span class="lesson-name">Математика</span>
+                                    <span class="lesson-time">9:00 – 9:40</span>
+                                </div>
+                                <span class="lesson-room">20</span>
+                            </div>
                         </div>
                         <div class="lesson">
                             <div class="lesson-num">3</div>
-                            <div class="lesson-info"><span class="lesson-name">Математика</span><span
-                                    class="lesson-room">20</span></div>
+                            <div class="lesson-info">
+                                <div class="lesson-text-wrapper">
+                                    <span class="lesson-name">Математика</span>
+                                    <span class="lesson-time">10:00 – 10:40</span>
+                                </div>
+                                <span class="lesson-room">20</span>
+                            </div>
                         </div>
                         <div class="lesson">
                             <div class="lesson-num">4</div>
-                            <div class="lesson-info"><span class="lesson-name">Иностранный язык</span><span
-                                    class="lesson-room">45</span></div>
+                            <div class="lesson-info">
+                                <div class="lesson-text-wrapper">
+                                    <span class="lesson-name">Иностранный язык</span>
+                                    <span class="lesson-time">10:55 – 11:35</span>
+                                </div>
+                                <span class="lesson-room">45</span>
+                            </div>
                         </div>
                         <div class="lesson">
                             <div class="lesson-num">5</div>
-                            <div class="lesson-info"><span class="lesson-name">Говорим и пишем</span><span
-                                    class="lesson-room">39</span></div>
+                            <div class="lesson-info">
+                                <div class="lesson-text-wrapper">
+                                    <span class="lesson-name">Говорим и пишем</span>
+                                    <span class="lesson-time">11:40 – 12:20</span>
+                                </div>
+                                <span class="lesson-room">39</span>
+                            </div>
                         </div>
                         <div class="lesson">
                             <div class="lesson-num">6</div>
-                            <div class="lesson-info"><span class="lesson-name">География</span><span
-                                    class="lesson-room">31</span></div>
+                            <div class="lesson-info">
+                                <div class="lesson-text-wrapper">
+                                    <span class="lesson-name">География</span>
+                                    <span class="lesson-time">12:25 – 13:05</span>
+                                </div>
+                                <span class="lesson-room">31</span>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -450,33 +523,63 @@
                     <div class="lesson-list">
                         <div class="lesson">
                             <div class="lesson-num">1</div>
-                            <div class="lesson-info"><span class="lesson-name">Математика</span><span
-                                    class="lesson-room">20</span></div>
+                            <div class="lesson-info">
+                                <div class="lesson-text-wrapper">
+                                    <span class="lesson-name">Математика</span>
+                                    <span class="lesson-time">8:00 – 8:40</span>
+                                </div>
+                                <span class="lesson-room">20</span>
+                            </div>
                         </div>
                         <div class="lesson">
                             <div class="lesson-num">2</div>
-                            <div class="lesson-info"><span class="lesson-name">Обществознание</span><span
-                                    class="lesson-room">41</span></div>
+                            <div class="lesson-info">
+                                <div class="lesson-text-wrapper">
+                                    <span class="lesson-name">Обществознание</span>
+                                    <span class="lesson-time">9:00 – 9:40</span>
+                                </div>
+                                <span class="lesson-room">41</span>
+                            </div>
                         </div>
                         <div class="lesson">
                             <div class="lesson-num">3</div>
-                            <div class="lesson-info"><span class="lesson-name">Биология</span><span
-                                    class="lesson-room">33</span></div>
+                            <div class="lesson-info">
+                                <div class="lesson-text-wrapper">
+                                    <span class="lesson-name">Биология</span>
+                                    <span class="lesson-time">10:00 – 10:40</span>
+                                </div>
+                                <span class="lesson-room">33</span>
+                            </div>
                         </div>
                         <div class="lesson">
                             <div class="lesson-num">4</div>
-                            <div class="lesson-info"><span class="lesson-name">История</span><span
-                                    class="lesson-room">26</span></div>
+                            <div class="lesson-info">
+                                <div class="lesson-text-wrapper">
+                                    <span class="lesson-name">История</span>
+                                    <span class="lesson-time">10:55 – 11:35</span>
+                                </div>
+                                <span class="lesson-room">26</span>
+                            </div>
                         </div>
                         <div class="lesson">
                             <div class="lesson-num">5</div>
-                            <div class="lesson-info"><span class="lesson-name">Физическая культура</span><span
-                                    class="lesson-room">спортзал</span></div>
+                            <div class="lesson-info">
+                                <div class="lesson-text-wrapper">
+                                    <span class="lesson-name">Физическая культура</span>
+                                    <span class="lesson-time">11:40 – 12:20</span>
+                                </div>
+                                <span class="lesson-room">спортзал</span>
+                            </div>
                         </div>
                         <div class="lesson">
                             <div class="lesson-num">6</div>
-                            <div class="lesson-info"><span class="lesson-name">Литература</span><span
-                                    class="lesson-room">39</span></div>
+                            <div class="lesson-info">
+                                <div class="lesson-text-wrapper">
+                                    <span class="lesson-name">Литература</span>
+                                    <span class="lesson-time">12:25 – 13:05</span>
+                                </div>
+                                <span class="lesson-room">39</span>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -489,34 +592,73 @@
                     </div>
                     <div class="lesson-list">
                         <div class="lesson">
+                            <div class="lesson-num">0</div>
+                            <div class="lesson-info">
+                                <div class="lesson-text-wrapper">
+                                    <span class="lesson-name">Профориентация</span>
+                                    <span class="lesson-time">8:00 – 8:20</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="lesson">
                             <div class="lesson-num">1</div>
-                            <div class="lesson-info"><span class="lesson-name">Математика</span><span
-                                    class="lesson-room">20</span></div>
+                            <div class="lesson-info">
+                                <div class="lesson-text-wrapper">
+                                    <span class="lesson-name">Математика</span>
+                                    <span class="lesson-time">8:25 – 9:05</span>
+                                </div>
+                                <span class="lesson-room">20</span>
+                            </div>
                         </div>
                         <div class="lesson">
                             <div class="lesson-num">2</div>
-                            <div class="lesson-info"><span class="lesson-name">Иностранный язык</span><span
-                                    class="lesson-room">45</span></div>
+                            <div class="lesson-info">
+                                <div class="lesson-text-wrapper">
+                                    <span class="lesson-name">Иностранный язык</span>
+                                    <span class="lesson-time">9:25 – 10:05</span>
+                                </div>
+                                <span class="lesson-room">45</span>
+                            </div>
                         </div>
                         <div class="lesson">
                             <div class="lesson-num">3</div>
-                            <div class="lesson-info"><span class="lesson-name">Физика</span><span
-                                    class="lesson-room">17</span></div>
+                            <div class="lesson-info">
+                                <div class="lesson-text-wrapper">
+                                    <span class="lesson-name">Физика</span>
+                                    <span class="lesson-time">10:20 – 11:00</span>
+                                </div>
+                                <span class="lesson-room">17</span>
+                            </div>
                         </div>
                         <div class="lesson">
                             <div class="lesson-num">4</div>
-                            <div class="lesson-info"><span class="lesson-name">Литература</span><span
-                                    class="lesson-room">39</span></div>
+                            <div class="lesson-info">
+                                <div class="lesson-text-wrapper">
+                                    <span class="lesson-name">Литература</span>
+                                    <span class="lesson-time">11:15 – 11:55</span>
+                                </div>
+                                <span class="lesson-room">39</span>
+                            </div>
                         </div>
                         <div class="lesson">
                             <div class="lesson-num">5</div>
-                            <div class="lesson-info"><span class="lesson-name">География</span><span
-                                    class="lesson-room">31</span></div>
+                            <div class="lesson-info">
+                                <div class="lesson-text-wrapper">
+                                    <span class="lesson-name">География</span>
+                                    <span class="lesson-time">12:00 – 12:35</span>
+                                </div>
+                                <span class="lesson-room">31</span>
+                            </div>
                         </div>
                         <div class="lesson">
                             <div class="lesson-num">6</div>
-                            <div class="lesson-info"><span class="lesson-name">Обществознание</span><span
-                                    class="lesson-room">41</span></div>
+                            <div class="lesson-info">
+                                <div class="lesson-text-wrapper">
+                                    <span class="lesson-name">Обществознание</span>
+                                    <span class="lesson-time">12:40 – 13:15</span>
+                                </div>
+                                <span class="lesson-room">41</span>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -530,33 +672,63 @@
                     <div class="lesson-list">
                         <div class="lesson">
                             <div class="lesson-num">1</div>
-                            <div class="lesson-info"><span class="lesson-name">ОБЗР</span><span
-                                    class="lesson-room">32</span></div>
+                            <div class="lesson-info">
+                                <div class="lesson-text-wrapper">
+                                    <span class="lesson-name">ОБЗР</span>
+                                    <span class="lesson-time">8:00 – 8:40</span>
+                                </div>
+                                <span class="lesson-room">32</span>
+                            </div>
                         </div>
                         <div class="lesson">
                             <div class="lesson-num">2</div>
-                            <div class="lesson-info"><span class="lesson-name">География</span><span
-                                    class="lesson-room">31</span></div>
+                            <div class="lesson-info">
+                                <div class="lesson-text-wrapper">
+                                    <span class="lesson-name">География</span>
+                                    <span class="lesson-time">9:00 – 9:40</span>
+                                </div>
+                                <span class="lesson-room">31</span>
+                            </div>
                         </div>
                         <div class="lesson">
                             <div class="lesson-num">3</div>
-                            <div class="lesson-info"><span class="lesson-name">История</span><span
-                                    class="lesson-room">26</span></div>
+                            <div class="lesson-info">
+                                <div class="lesson-text-wrapper">
+                                    <span class="lesson-name">История</span>
+                                    <span class="lesson-time">10:00 – 10:40</span>
+                                </div>
+                                <span class="lesson-room">26</span>
+                            </div>
                         </div>
                         <div class="lesson">
                             <div class="lesson-num">4</div>
-                            <div class="lesson-info"><span class="lesson-name">Обществознание</span><span
-                                    class="lesson-room">41</span></div>
+                            <div class="lesson-info">
+                                <div class="lesson-text-wrapper">
+                                    <span class="lesson-name">Обществознание</span>
+                                    <span class="lesson-time">10:55 – 11:35</span>
+                                </div>
+                                <span class="lesson-room">41</span>
+                            </div>
                         </div>
                         <div class="lesson">
                             <div class="lesson-num">5</div>
-                            <div class="lesson-info"><span class="lesson-name">Физическая культура</span><span
-                                    class="lesson-room">спортзал</span></div>
+                            <div class="lesson-info">
+                                <div class="lesson-text-wrapper">
+                                    <span class="lesson-name">Физическая культура</span>
+                                    <span class="lesson-time">11:40 – 12:20</span>
+                                </div>
+                                <span class="lesson-room">спортзал</span>
+                            </div>
                         </div>
                         <div class="lesson">
                             <div class="lesson-num">6</div>
-                            <div class="lesson-info"><span class="lesson-name">Информатика</span><span
-                                    class="lesson-room">18</span></div>
+                            <div class="lesson-info">
+                                <div class="lesson-text-wrapper">
+                                    <span class="lesson-name">Информатика</span>
+                                    <span class="lesson-time">12:25 – 13:05</span>
+                                </div>
+                                <span class="lesson-room">18</span>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -570,33 +742,63 @@
                     <div class="lesson-list">
                         <div class="lesson">
                             <div class="lesson-num">1</div>
-                            <div class="lesson-info"><span class="lesson-name">Литература</span><span
-                                    class="lesson-room">39</span></div>
+                            <div class="lesson-info">
+                                <div class="lesson-text-wrapper">
+                                    <span class="lesson-name">Литература</span>
+                                    <span class="lesson-time">8:00 – 8:40</span>
+                                </div>
+                                <span class="lesson-room">39</span>
+                            </div>
                         </div>
                         <div class="lesson">
                             <div class="lesson-num">2</div>
-                            <div class="lesson-info"><span class="lesson-name">Русский язык</span><span
-                                    class="lesson-room">39</span></div>
+                            <div class="lesson-info">
+                                <div class="lesson-text-wrapper">
+                                    <span class="lesson-name">Русский язык</span>
+                                    <span class="lesson-time">8:50 – 9:30</span>
+                                </div>
+                                <span class="lesson-room">39</span>
+                            </div>
                         </div>
                         <div class="lesson">
                             <div class="lesson-num">3</div>
-                            <div class="lesson-info"><span class="lesson-name">Химия</span><span
-                                    class="lesson-room">33</span></div>
+                            <div class="lesson-info">
+                                <div class="lesson-text-wrapper">
+                                    <span class="lesson-name">Химия</span>
+                                    <span class="lesson-time">9:40 – 10:20</span>
+                                </div>
+                                <span class="lesson-room">33</span>
+                            </div>
                         </div>
                         <div class="lesson">
                             <div class="lesson-num">4</div>
-                            <div class="lesson-info"><span class="lesson-name">Математика</span><span
-                                    class="lesson-room">20</span></div>
+                            <div class="lesson-info">
+                                <div class="lesson-text-wrapper">
+                                    <span class="lesson-name">Математика</span>
+                                    <span class="lesson-time">10:40 – 11:20</span>
+                                </div>
+                                <span class="lesson-room">20</span>
+                            </div>
                         </div>
                         <div class="lesson">
                             <div class="lesson-num">5</div>
-                            <div class="lesson-info"><span class="lesson-name">Математика</span><span
-                                    class="lesson-room">20</span></div>
+                            <div class="lesson-info">
+                                <div class="lesson-text-wrapper">
+                                    <span class="lesson-name">Математика</span>
+                                    <span class="lesson-time">11:30 – 12:10</span>
+                                </div>
+                                <span class="lesson-room">20</span>
+                            </div>
                         </div>
                         <div class="lesson">
                             <div class="lesson-num">6</div>
-                            <div class="lesson-info"><span class="lesson-name">Обществознание</span><span
-                                    class="lesson-room">41</span></div>
+                            <div class="lesson-info">
+                                <div class="lesson-text-wrapper">
+                                    <span class="lesson-name">Обществознание</span>
+                                    <span class="lesson-time">12:20 – 13:00</span>
+                                </div>
+                                <span class="lesson-room">41</span>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -611,7 +813,6 @@
             var today = now.getDay();
             // В JS: 0 - Воскресенье, 1 - Понедельник, ... 6 - Суббота
 
-            // Если сегодня не воскресенье (в вашем расписании только Пн-Сб)
             if (today >= 1 && today <= 6) {
                 var dateNum = now.getDate();
                 var monthNum = now.getMonth() + 1;
@@ -634,15 +835,21 @@
                         dateBadge.innerHTML = dateNum + '<span>' + monthNum + '</span>';
                     }
 
-                    // === ПРОКРУТКА К СЕГОДНЯШНЕМУ ДНЮ ===
-                    // Небольшая задержка, чтобы шрифты и layout успели загрузиться
+                    // === ПРОКРУТКА К СЕГОДНЯШНЕМУ ДНЮ ПО ЦЕНТРУ ЭКРАНА ===
                     setTimeout(function () {
-                        var cardTop = card.getBoundingClientRect().top + window.pageYOffset;
-                        // Отступ сверху, чтобы плашка дня не прилипала к краю экрана
-                        var offset = 16;
+                        var cardRect = card.getBoundingClientRect();
+                        var cardTop = cardRect.top + window.pageYOffset;
+                        var cardHeight = cardRect.height;
+                        var viewportHeight = window.innerHeight;
+
+                        // Центрируем карточку
+                        var scrollTarget = cardTop - (viewportHeight / 2) + (cardHeight / 2);
+
+                        // Не уходим выше нуля
+                        if (scrollTarget < 0) scrollTarget = 0;
 
                         window.scrollTo({
-                            top: cardTop - offset,
+                            top: scrollTarget,
                             behavior: 'smooth'
                         });
                     }, 100);
