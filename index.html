@@ -197,6 +197,7 @@
 
         .lesson:last-child { border-bottom: none; }
 
+        /* --- АКТИВНЫЙ УРОК --- */
         .lesson.active-lesson {
             background: #dbeafe;
             padding: 12px 8px;
@@ -220,6 +221,22 @@
         /* Скрываем кабинет у активного урока */
         .lesson.active-lesson .lesson-room {
             display: none;
+        }
+
+        /* --- КАБИНЕТ СЛЕДУЮЩЕГО УРОКА (НА ПЕРЕМЕНЕ) --- */
+        .lesson.next-lesson-highlight .lesson-room {
+            background: #3b82f6;
+            color: white;
+            box-shadow: 0 0 0 2px #bfdbfe, 0 4px 10px rgba(59, 130, 246, 0.4);
+            transform: scale(1.1);
+            animation: pulse-blue 2s infinite;
+            font-weight: 800;
+        }
+
+        @keyframes pulse-blue {
+            0% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.7); transform: scale(1.1); }
+            70% { box-shadow: 0 0 0 6px rgba(59, 130, 246, 0); transform: scale(1.1); }
+            100% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0); transform: scale(1.1); }
         }
 
         .lesson-timer {
@@ -296,7 +313,7 @@
             white-space: nowrap;
             flex-shrink: 0;
             box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
-            transition: background 0.2s;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         @media (max-width: 480px) {
@@ -805,8 +822,9 @@
                 var currentDay = now.getDay();
                 if (currentDay === 0) currentDay = 7;
 
+                // Очищаем старые состояния
                 document.querySelectorAll('.lesson').forEach(function(lesson) {
-                    lesson.classList.remove('active-lesson');
+                    lesson.classList.remove('active-lesson', 'next-lesson-highlight');
                     var oldTimer = lesson.querySelector('.lesson-timer');
                     if (oldTimer) oldTimer.remove();
                 });
@@ -814,9 +832,12 @@
                 var todayCard = document.querySelector('.day-card[data-day="' + currentDay + '"]');
                 if (!todayCard) return;
 
-                var lessons = todayCard.querySelectorAll('.lesson');
+                var lessons = Array.from(todayCard.querySelectorAll('.lesson'));
                 if (!lessons.length) return;
 
+                var activeLessonIndex = -1;
+
+                // 1. Ищем текущий активный урок
                 for (var i = 0; i < lessons.length; i++) {
                     var lesson = lessons[i];
                     var startStr = lesson.dataset.start;
@@ -825,25 +846,45 @@
 
                     var startParts = parseTime(startStr);
                     var endParts = parseTime(endStr);
-
                     var startDate = getDateWithTime(startParts.hours, startParts.minutes);
                     var endDate = getDateWithTime(endParts.hours, endParts.minutes);
 
+                    // Если сейчас идет урок
                     if (now >= startDate && now <= endDate) {
+                        activeLessonIndex = i;
                         lesson.classList.add('active-lesson');
 
                         var diffMs = endDate - now;
                         var diffMinutes = Math.ceil(diffMs / 60000);
 
-                        var timerEl = lesson.querySelector('.lesson-timer');
-                        if (!timerEl) {
-                            timerEl = document.createElement('span');
-                            timerEl.className = 'lesson-timer';
-                            var infoWrapper = lesson.querySelector('.lesson-info');
-                            if (infoWrapper) infoWrapper.appendChild(timerEl);
-                        }
+                        var timerEl = document.createElement('span');
+                        timerEl.className = 'lesson-timer';
                         timerEl.textContent = '⏳ ' + formatRemaining(diffMinutes);
+                        
+                        var infoWrapper = lesson.querySelector('.lesson-info');
+                        if (infoWrapper) infoWrapper.appendChild(timerEl);
                         break;
+                    }
+                }
+
+                // 2. Если активного урока нет (мы на перемене), ищем следующий урок
+                if (activeLessonIndex === -1) {
+                    for (var j = 0; j < lessons.length; j++) {
+                        var nextLesson = lessons[j];
+                        var nStartStr = nextLesson.dataset.start;
+                        if (!nStartStr) continue;
+
+                        var nStartParts = parseTime(nStartStr);
+                        var nStartDate = getDateWithTime(nStartParts.hours, nStartParts.minutes);
+
+                        // Если урок еще не начался (время начала в будущем)
+                        if (now < nStartDate) {
+                            // Проверяем, есть ли у него кабинет
+                            if (nextLesson.querySelector('.lesson-room')) {
+                                nextLesson.classList.add('next-lesson-highlight');
+                            }
+                            break; // Нашли ближайший следующий урок, дальше не идем
+                        }
                     }
                 }
             }
@@ -878,7 +919,8 @@
                 }
 
                 updateActiveLesson();
-                setInterval(updateActiveLesson, 10000);
+                // Обновляем каждую секунду для точного отображения таймера
+                setInterval(updateActiveLesson, 1000);
             });
         })();
     </script>
