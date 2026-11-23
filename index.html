@@ -1,11 +1,9 @@
 <!DOCTYPE html>
 <html lang="ru">
-
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport"
-        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Расписание на неделю</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Расписание на неделю — умный таймер урока</title>
 
     <!-- Мета-теги для работы в виде приложения -->
     <meta name="theme-color" content="#e2e8f0">
@@ -26,6 +24,7 @@
             --card-border: rgba(255, 255, 255, 0.7);
             --glass-shadow: 0 8px 24px 0 rgba(31, 38, 135, 0.08);
             --badge-bg: rgba(255, 255, 255, 0.8);
+            --active-glow: 0 0 0 2px #3b82f6, 0 8px 25px rgba(59, 130, 246, 0.4);
         }
 
         * {
@@ -127,6 +126,7 @@
             position: relative;
             padding-top: 24px;
             padding-bottom: 10px;
+            transition: box-shadow 0.3s ease;
         }
 
         /* --- ПЛАШКА ДНЯ --- */
@@ -213,10 +213,58 @@
             align-items: center;
             padding: 12px 0;
             border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            transition: background 0.2s, border-radius 0.2s, padding 0.2s;
+            border-radius: 10px;
+            position: relative;
         }
 
         .lesson:last-child {
             border-bottom: none;
+        }
+
+        /* Подсветка активного урока */
+        .lesson.active-lesson {
+            background: #dbeafe;
+            padding: 12px 8px;
+            margin: 0 -8px;
+            border-bottom: 1px solid transparent;
+            box-shadow: 0 2px 10px rgba(59, 130, 246, 0.2);
+            border-radius: 12px;
+        }
+
+        .lesson.active-lesson .lesson-num {
+            background: #3b82f6;
+            color: white;
+            box-shadow: 0 2px 8px rgba(59, 130, 246, 0.5);
+        }
+
+        .lesson.active-lesson .lesson-name {
+            color: #1e3a8a;
+            font-weight: 700;
+        }
+
+        .lesson.active-lesson .lesson-room {
+            background: #ffffff;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Таймер до конца урока */
+        .lesson-timer {
+            display: none;
+            font-size: 11px;
+            font-weight: 700;
+            color: #1e40af;
+            background: #eff6ff;
+            padding: 2px 8px;
+            border-radius: 20px;
+            margin-left: 8px;
+            white-space: nowrap;
+            border: 1px solid #bfdbfe;
+            letter-spacing: 0.2px;
+        }
+
+        .lesson.active-lesson .lesson-timer {
+            display: inline-block;
         }
 
         .lesson-num {
@@ -233,6 +281,7 @@
             background: rgba(255, 255, 255, 0.6);
             color: #475569;
             flex-shrink: 0;
+            transition: background 0.2s, color 0.2s;
         }
 
         .lesson-info {
@@ -256,6 +305,7 @@
             font-weight: 600;
             color: #1e293b;
             line-height: 1.3;
+            transition: color 0.2s;
         }
 
         /* Стили для времени звонка */
@@ -277,6 +327,7 @@
             white-space: nowrap;
             flex-shrink: 0;
             box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+            transition: background 0.2s;
         }
 
         /* --- АДАПТИВНОСТЬ --- */
@@ -325,6 +376,11 @@
                 padding: 14px 0;
             }
 
+            .lesson.active-lesson {
+                padding: 14px 8px;
+                margin: 0 -8px;
+            }
+
             .lesson-num {
                 width: 32px;
                 min-width: 32px;
@@ -349,10 +405,15 @@
                 padding: 4px 8px;
                 border-radius: 6px;
             }
+
+            .lesson-timer {
+                font-size: 11px;
+                padding: 2px 6px;
+                white-space: normal;
+            }
         }
     </style>
 </head>
-
 <body>
 
     <div class="scroll-wrapper">
@@ -372,7 +433,7 @@
                         <div class="date-badge"></div>
                     </div>
                     <div class="lesson-list">
-                        <div class="lesson">
+                        <div class="lesson" data-start="8:00" data-end="8:30">
                             <div class="lesson-num">0</div>
                             <div class="lesson-info">
                                 <div class="lesson-text-wrapper">
@@ -381,7 +442,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="lesson">
+                        <div class="lesson" data-start="8:35" data-end="9:15">
                             <div class="lesson-num">1</div>
                             <div class="lesson-info">
                                 <div class="lesson-text-wrapper">
@@ -391,7 +452,7 @@
                                 <span class="lesson-room">спортзал</span>
                             </div>
                         </div>
-                        <div class="lesson">
+                        <div class="lesson" data-start="9:35" data-end="10:15">
                             <div class="lesson-num">2</div>
                             <div class="lesson-info">
                                 <div class="lesson-text-wrapper">
@@ -401,7 +462,7 @@
                                 <span class="lesson-room">45</span>
                             </div>
                         </div>
-                        <div class="lesson">
+                        <div class="lesson" data-start="10:35" data-end="11:15">
                             <div class="lesson-num">3</div>
                             <div class="lesson-info">
                                 <div class="lesson-text-wrapper">
@@ -411,7 +472,7 @@
                                 <span class="lesson-room">20</span>
                             </div>
                         </div>
-                        <div class="lesson">
+                        <div class="lesson" data-start="11:30" data-end="12:10">
                             <div class="lesson-num">4</div>
                             <div class="lesson-info">
                                 <div class="lesson-text-wrapper">
@@ -421,7 +482,7 @@
                                 <span class="lesson-room">20</span>
                             </div>
                         </div>
-                        <div class="lesson">
+                        <div class="lesson" data-start="12:15" data-end="12:50">
                             <div class="lesson-num">5</div>
                             <div class="lesson-info">
                                 <div class="lesson-text-wrapper">
@@ -431,7 +492,7 @@
                                 <span class="lesson-room">15</span>
                             </div>
                         </div>
-                        <div class="lesson">
+                        <div class="lesson" data-start="12:55" data-end="13:30">
                             <div class="lesson-num">6</div>
                             <div class="lesson-info">
                                 <div class="lesson-text-wrapper">
@@ -451,7 +512,7 @@
                         <div class="date-badge"></div>
                     </div>
                     <div class="lesson-list">
-                        <div class="lesson">
+                        <div class="lesson" data-start="8:00" data-end="8:40">
                             <div class="lesson-num">1</div>
                             <div class="lesson-info">
                                 <div class="lesson-text-wrapper">
@@ -461,7 +522,7 @@
                                 <span class="lesson-room">39</span>
                             </div>
                         </div>
-                        <div class="lesson">
+                        <div class="lesson" data-start="9:00" data-end="9:40">
                             <div class="lesson-num">2</div>
                             <div class="lesson-info">
                                 <div class="lesson-text-wrapper">
@@ -471,7 +532,7 @@
                                 <span class="lesson-room">20</span>
                             </div>
                         </div>
-                        <div class="lesson">
+                        <div class="lesson" data-start="10:00" data-end="10:40">
                             <div class="lesson-num">3</div>
                             <div class="lesson-info">
                                 <div class="lesson-text-wrapper">
@@ -481,7 +542,7 @@
                                 <span class="lesson-room">20</span>
                             </div>
                         </div>
-                        <div class="lesson">
+                        <div class="lesson" data-start="10:55" data-end="11:35">
                             <div class="lesson-num">4</div>
                             <div class="lesson-info">
                                 <div class="lesson-text-wrapper">
@@ -491,7 +552,7 @@
                                 <span class="lesson-room">45</span>
                             </div>
                         </div>
-                        <div class="lesson">
+                        <div class="lesson" data-start="11:40" data-end="12:20">
                             <div class="lesson-num">5</div>
                             <div class="lesson-info">
                                 <div class="lesson-text-wrapper">
@@ -501,7 +562,7 @@
                                 <span class="lesson-room">39</span>
                             </div>
                         </div>
-                        <div class="lesson">
+                        <div class="lesson" data-start="12:25" data-end="13:05">
                             <div class="lesson-num">6</div>
                             <div class="lesson-info">
                                 <div class="lesson-text-wrapper">
@@ -521,7 +582,7 @@
                         <div class="date-badge"></div>
                     </div>
                     <div class="lesson-list">
-                        <div class="lesson">
+                        <div class="lesson" data-start="8:00" data-end="8:40">
                             <div class="lesson-num">1</div>
                             <div class="lesson-info">
                                 <div class="lesson-text-wrapper">
@@ -531,7 +592,7 @@
                                 <span class="lesson-room">20</span>
                             </div>
                         </div>
-                        <div class="lesson">
+                        <div class="lesson" data-start="9:00" data-end="9:40">
                             <div class="lesson-num">2</div>
                             <div class="lesson-info">
                                 <div class="lesson-text-wrapper">
@@ -541,7 +602,7 @@
                                 <span class="lesson-room">41</span>
                             </div>
                         </div>
-                        <div class="lesson">
+                        <div class="lesson" data-start="10:00" data-end="10:40">
                             <div class="lesson-num">3</div>
                             <div class="lesson-info">
                                 <div class="lesson-text-wrapper">
@@ -551,7 +612,7 @@
                                 <span class="lesson-room">33</span>
                             </div>
                         </div>
-                        <div class="lesson">
+                        <div class="lesson" data-start="10:55" data-end="11:35">
                             <div class="lesson-num">4</div>
                             <div class="lesson-info">
                                 <div class="lesson-text-wrapper">
@@ -561,7 +622,7 @@
                                 <span class="lesson-room">26</span>
                             </div>
                         </div>
-                        <div class="lesson">
+                        <div class="lesson" data-start="11:40" data-end="12:20">
                             <div class="lesson-num">5</div>
                             <div class="lesson-info">
                                 <div class="lesson-text-wrapper">
@@ -571,7 +632,7 @@
                                 <span class="lesson-room">спортзал</span>
                             </div>
                         </div>
-                        <div class="lesson">
+                        <div class="lesson" data-start="12:25" data-end="13:05">
                             <div class="lesson-num">6</div>
                             <div class="lesson-info">
                                 <div class="lesson-text-wrapper">
@@ -591,7 +652,7 @@
                         <div class="date-badge"></div>
                     </div>
                     <div class="lesson-list">
-                        <div class="lesson">
+                        <div class="lesson" data-start="8:00" data-end="8:20">
                             <div class="lesson-num">0</div>
                             <div class="lesson-info">
                                 <div class="lesson-text-wrapper">
@@ -600,7 +661,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="lesson">
+                        <div class="lesson" data-start="8:25" data-end="9:05">
                             <div class="lesson-num">1</div>
                             <div class="lesson-info">
                                 <div class="lesson-text-wrapper">
@@ -610,7 +671,7 @@
                                 <span class="lesson-room">20</span>
                             </div>
                         </div>
-                        <div class="lesson">
+                        <div class="lesson" data-start="9:25" data-end="10:05">
                             <div class="lesson-num">2</div>
                             <div class="lesson-info">
                                 <div class="lesson-text-wrapper">
@@ -620,7 +681,7 @@
                                 <span class="lesson-room">45</span>
                             </div>
                         </div>
-                        <div class="lesson">
+                        <div class="lesson" data-start="10:20" data-end="11:00">
                             <div class="lesson-num">3</div>
                             <div class="lesson-info">
                                 <div class="lesson-text-wrapper">
@@ -630,7 +691,7 @@
                                 <span class="lesson-room">17</span>
                             </div>
                         </div>
-                        <div class="lesson">
+                        <div class="lesson" data-start="11:15" data-end="11:55">
                             <div class="lesson-num">4</div>
                             <div class="lesson-info">
                                 <div class="lesson-text-wrapper">
@@ -640,7 +701,7 @@
                                 <span class="lesson-room">39</span>
                             </div>
                         </div>
-                        <div class="lesson">
+                        <div class="lesson" data-start="12:00" data-end="12:35">
                             <div class="lesson-num">5</div>
                             <div class="lesson-info">
                                 <div class="lesson-text-wrapper">
@@ -650,7 +711,7 @@
                                 <span class="lesson-room">31</span>
                             </div>
                         </div>
-                        <div class="lesson">
+                        <div class="lesson" data-start="12:40" data-end="13:15">
                             <div class="lesson-num">6</div>
                             <div class="lesson-info">
                                 <div class="lesson-text-wrapper">
@@ -670,7 +731,7 @@
                         <div class="date-badge"></div>
                     </div>
                     <div class="lesson-list">
-                        <div class="lesson">
+                        <div class="lesson" data-start="8:00" data-end="8:40">
                             <div class="lesson-num">1</div>
                             <div class="lesson-info">
                                 <div class="lesson-text-wrapper">
@@ -680,7 +741,7 @@
                                 <span class="lesson-room">32</span>
                             </div>
                         </div>
-                        <div class="lesson">
+                        <div class="lesson" data-start="9:00" data-end="9:40">
                             <div class="lesson-num">2</div>
                             <div class="lesson-info">
                                 <div class="lesson-text-wrapper">
@@ -690,7 +751,7 @@
                                 <span class="lesson-room">31</span>
                             </div>
                         </div>
-                        <div class="lesson">
+                        <div class="lesson" data-start="10:00" data-end="10:40">
                             <div class="lesson-num">3</div>
                             <div class="lesson-info">
                                 <div class="lesson-text-wrapper">
@@ -700,7 +761,7 @@
                                 <span class="lesson-room">26</span>
                             </div>
                         </div>
-                        <div class="lesson">
+                        <div class="lesson" data-start="10:55" data-end="11:35">
                             <div class="lesson-num">4</div>
                             <div class="lesson-info">
                                 <div class="lesson-text-wrapper">
@@ -710,7 +771,7 @@
                                 <span class="lesson-room">41</span>
                             </div>
                         </div>
-                        <div class="lesson">
+                        <div class="lesson" data-start="11:40" data-end="12:20">
                             <div class="lesson-num">5</div>
                             <div class="lesson-info">
                                 <div class="lesson-text-wrapper">
@@ -720,7 +781,7 @@
                                 <span class="lesson-room">спортзал</span>
                             </div>
                         </div>
-                        <div class="lesson">
+                        <div class="lesson" data-start="12:25" data-end="13:05">
                             <div class="lesson-num">6</div>
                             <div class="lesson-info">
                                 <div class="lesson-text-wrapper">
@@ -740,7 +801,7 @@
                         <div class="date-badge"></div>
                     </div>
                     <div class="lesson-list">
-                        <div class="lesson">
+                        <div class="lesson" data-start="8:00" data-end="8:40">
                             <div class="lesson-num">1</div>
                             <div class="lesson-info">
                                 <div class="lesson-text-wrapper">
@@ -750,7 +811,7 @@
                                 <span class="lesson-room">39</span>
                             </div>
                         </div>
-                        <div class="lesson">
+                        <div class="lesson" data-start="8:50" data-end="9:30">
                             <div class="lesson-num">2</div>
                             <div class="lesson-info">
                                 <div class="lesson-text-wrapper">
@@ -760,7 +821,7 @@
                                 <span class="lesson-room">39</span>
                             </div>
                         </div>
-                        <div class="lesson">
+                        <div class="lesson" data-start="9:40" data-end="10:20">
                             <div class="lesson-num">3</div>
                             <div class="lesson-info">
                                 <div class="lesson-text-wrapper">
@@ -770,7 +831,7 @@
                                 <span class="lesson-room">33</span>
                             </div>
                         </div>
-                        <div class="lesson">
+                        <div class="lesson" data-start="10:40" data-end="11:20">
                             <div class="lesson-num">4</div>
                             <div class="lesson-info">
                                 <div class="lesson-text-wrapper">
@@ -780,7 +841,7 @@
                                 <span class="lesson-room">20</span>
                             </div>
                         </div>
-                        <div class="lesson">
+                        <div class="lesson" data-start="11:30" data-end="12:10">
                             <div class="lesson-num">5</div>
                             <div class="lesson-info">
                                 <div class="lesson-text-wrapper">
@@ -790,7 +851,7 @@
                                 <span class="lesson-room">20</span>
                             </div>
                         </div>
-                        <div class="lesson">
+                        <div class="lesson" data-start="12:20" data-end="13:00">
                             <div class="lesson-num">6</div>
                             <div class="lesson-info">
                                 <div class="lesson-text-wrapper">
@@ -808,55 +869,36 @@
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            var now = new Date();
-            var today = now.getDay();
-            // В JS: 0 - Воскресенье, 1 - Понедельник, ... 6 - Суббота
-
-            if (today >= 1 && today <= 6) {
-                var dateNum = now.getDate();
-                var monthNum = now.getMonth() + 1;
-                if (monthNum < 10) {
-                    monthNum = '0' + monthNum;
-                }
-
-                var card = document.querySelector('.day-card[data-day="' + today + '"]');
-
-                if (card) {
-                    card.classList.add('today');
-
-                    var titleEl = card.querySelector('.day-title');
-                    if (titleEl) {
-                        titleEl.textContent = 'Сегодня';
-                    }
-
-                    var dateBadge = card.querySelector('.date-badge');
-                    if (dateBadge) {
-                        dateBadge.innerHTML = dateNum + '<span>' + monthNum + '</span>';
-                    }
-
-                    // === ПРОКРУТКА К СЕГОДНЯШНЕМУ ДНЮ ПО ЦЕНТРУ ЭКРАНА ===
-                    setTimeout(function () {
-                        var cardRect = card.getBoundingClientRect();
-                        var cardTop = cardRect.top + window.pageYOffset;
-                        var cardHeight = cardRect.height;
-                        var viewportHeight = window.innerHeight;
-
-                        // Центрируем карточку
-                        var scrollTarget = cardTop - (viewportHeight / 2) + (cardHeight / 2);
-
-                        // Не уходим выше нуля
-                        if (scrollTarget < 0) scrollTarget = 0;
-
-                        window.scrollTo({
-                            top: scrollTarget,
-                            behavior: 'smooth'
-                        });
-                    }, 100);
-                }
+        (function() {
+            // --- ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ ДЛЯ РАБОТЫ СО ВРЕМЕНЕМ ---
+            function parseTime(timeStr) {
+                // timeStr в формате "8:00" или "08:00"
+                var parts = timeStr.split(':');
+                return {
+                    hours: parseInt(parts[0], 10),
+                    minutes: parseInt(parts[1], 10)
+                };
             }
-        });
-    </script>
-</body>
 
-</html>
+            // Возвращает объект Date на основе текущей даты и переданного времени (часы, минуты)
+            function getDateWithTime(hours, minutes) {
+                var d = new Date();
+                d.setHours(hours, minutes, 0, 0);
+                return d;
+            }
+
+            // Форматирует оставшееся время в минутах в строку вида "45 мин" или "1 ч 5 мин"
+            function formatRemaining(minutesLeft) {
+                if (minutesLeft <= 0) return '0 мин';
+                if (minutesLeft < 60) {
+                    return minutesLeft + ' мин';
+                }
+                var h = Math.floor(minutesLeft / 60);
+                var m = minutesLeft % 60;
+                return h + ' ч ' + (m > 0 ? m + ' мин' : '');
+            }
+
+            // --- ОСНОВНАЯ ЛОГИКА ---
+            function updateActiveLesson() {
+                var now = new Date();
+                var currentDay = now.getDay(); // 0 - Вс, 1 -
